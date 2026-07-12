@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для Тебя</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    /* Глубокая полярная ночь */
+    background: linear-gradient(135deg, #04060d 0%, #080e1e 50%, #0d0714 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: #ffffff;
+}
+
+/* Изумрудная волна северного сияния */
+.ambient-glow {
+    position: absolute;
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.18) 0%, rgba(45, 212, 191, 0.05) 50%, rgba(0,0,0,0) 80%);
+    top: -10%;
+    left: -10%;
+    z-index: 1;
+    filter: blur(40px);
+    animation: aurora-1 15s infinite alternate ease-in-out;
+}
+
+/* Фиолетово-пурпурная волна сияния */
+.ambient-glow-2 {
+    position: absolute;
+    width: 600px;
+    height: 500px;
+    background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.03) 60%, rgba(0,0,0,0) 80%);
+    bottom: -10%;
+    right: -10%;
+    z-index: 1;
+    filter: blur(50px);
+    animation: aurora-2 20s infinite alternate-reverse ease-in-out;
+}
+
+/* Магия движения сияния в небе */
+@keyframes aurora-1 {
+    0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0.5; }
+    50% { transform: translate(50px, 30px) scale(1.1) rotate(5deg); opacity: 0.8; }
+    100% { transform: translate(-30px, 60px) scale(0.9) rotate(-3deg); opacity: 0.6; }
+}
+
+@keyframes aurora-2 {
+    0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0.6; }
+    50% { transform: translate(-40px, -50px) scale(1.15) rotate(-5deg); opacity: 0.9; }
+    100% { transform: translate(30px, -20px) scale(0.95) rotate(4deg); opacity: 0.5; }
+}
+
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 465px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px rgba(255, 255, 255, 0.08) solid;
+            border-radius: 28px;
+            padding: 40px 25px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            width: 100%;
+            transition: opacity 0.8s ease;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 24pt;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            color: #f43f5e;
+            text-shadow: 0 0 15px rgba(244, 63, 94, 0.3);
+        }
+
+        p {
+            font-size: 12pt;
+            line-height: 1.6;
+            font-weight: 300;
+            color: #fff1f2;
+            margin-bottom: 20px;
+        }
+
+        .highlight-text {
+            color: #f43f5e;
+            font-weight: 400;
+        }
+
+        .subtitle {
+            font-size: 11pt;
+            color: #94a3b8;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 11pt;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.3);
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .heart-icon {
+            font-size: 30pt;
+            color: #f43f5e;
+            margin-bottom: 15px;
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.1); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.15); }
+            80% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 25px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #f43f5e;
+            width: 18px;
+            border-radius: 10px;
+        }
+
+        #music-player {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow"></div>
+    <div class="ambient-glow-2"></div>
+
+    <div class="container">
+        <div class="card">
+            
+            <!-- СТРАНИЦА 1 -->
+            <div id="page1" class="page active">
+                <h1>ДЛЯ ТЕБЯ</h1>
+                <p class="subtitle">Сделай звук погромче и нажми на кнопку, чтобы начать...</p>
+                <button class="btn" onclick="startStory()">ВЕТОЧКА</button>
+            </div>
+
+            <!-- СТРАНИЦА 2 -->
+            <div id="page2" class="page">
+                <p>Знаешь, в этом мире так много суеты, шума и бесконечных экранов... Но среди всего этого хаоса есть то, что заставляет меня остановиться.</p>
+                <p>Это твоё присутствие. То, как ты общаешься, твои мысли и твоя атмосфера.
+Ты умеешь делать дни по-настоящему особенными, даже на расстоянии.Ты отпечаталась в моём сердце, <span class="highlight-text">Веточка</span>, с самого первого дня, как ты вошла в мою жизнь. Помнишь, как мы познакомились? Твои нежные слова, мои дурацкие шутки... И тот вечер <span class="highlight-text">30.03.2026</span>. Тогда шёл такой красивый снег... Это будет мой самый незабываемый вечер.</p>
+                <button class="btn" onclick="nextPage(3)">Дальше</button>
+            </div>
+
+            <!-- СТРАНИЦА 3 -->
+            <div id="page3" class="page">
+                <p>Когда я впервые тебя увидел, у меня появилось такое чувство, которое просто невозможно описать словами. Твоё присутствие, то, как ты общаешься, твои мысли и твоя атмосфера — ты умеешь делать дни по-настоящему особенными, даже на расстоянии.</p>
+                <p>Я теперь в каждом прохожем вижу тебя и везде тебя ищу.</p>
+                <button class="btn" onclick="nextPage(4)">Продолжить</button>
+            </div>
+
+            <!-- СТРАНИЦА 4 -->
+            <div id="page4" class="page">
+                <p>Мне очень хочется чаще вызывать у тебя улыбку. Постоянно радовать, заботиться и просто баловать тебя, потому что ты заслуживаешь всего самого лучшего и нежного.</p>
+                <p>Пожалуйста, не думай много, я не хочу, чтобы ты грустила. Просто живи хорошо.</p>
+                <button class="btn" onclick="nextPage(5)">И самое главное...</button>
+            </div>
+
+            <!-- СТРАНИЦА 5 -->
+            <div id="page5" class="page">
+                <p style="font-size: 14pt; font-weight: 300; margin-bottom: 15px;">Надеюсь, однажды я увижу твои прекрасные глаза вживую...</p>
+                <p style="color: #f43f5e; font-size: 17pt; font-weight: 600; text-shadow: 0 0 10px rgba(244,63,94,0.4);">Ты моя мечта.</p>
+                <button class="btn" onclick="nextPage(6)">Открыть сердце</button>
+            </div>
+
+            <!-- СТРАНИЦА 6 -->
+            <div id="page6" class="page">
+                <div class="heart-icon">♥</div>
+                <p>Я всегда буду рядом с тобой. Даже если иногда я не пишу — это не значит, что мне плевать. Просто иногда я боюсь, что задел тебя... Но я всё равно думаю о тебе каждую минуту. Пожалуйста, не используй это против меня.</p>
+                <p>Пусть эта музыка и мои слова согревают тебя прямо сейчас.</p>
+                <p style="font-size: 14pt; font-weight: 400; color: #f43f5e; margin-top: 15px; margin-bottom: 0;">С любовью, Саладин</p>
+            </div>
+
+            <!-- Точки прогресса -->
+            <div class="progress-dots" id="dots-container" style="display: none;">
+                <div class="dot active" id="dot2"></div>
+                <div class="dot" id="dot3"></div>
+                <div class="dot" id="dot4"></div>
+                <div class="dot" id="dot5"></div>
+                <div class="dot" id="dot6"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Скрытый плеер с треком Liora - Jason Fervento -->
+    <iframe id="music-player" src="" allow="autoplay"></iframe>
+
+    <script>
+        function startStory() {
+            var player = document.getElementById('music-player');
+            player.src = "https://www.youtube.com/embed/videoseries?list=OLAK5uy_lOhwnYeNOPDKx6WPBfB73kQKx8OjcJJko&autoplay=1&enablejsapi=1";
+            
+            document.getElementById('dots-container').style.display = 'flex';
+            nextPage(2);
+        }
+
+        function nextPage(pageNumber) {
+            var currentActive = document.querySelector('.page.active');
+            if (currentActive) {
+                currentActive.style.opacity = '0';
+                
+                setTimeout(function() {
+                    currentActive.classList.remove('active');
+                    
+                    var nextPageElement = document.getElementById('page' + pageNumber);
+                    nextPageElement.classList.add('active');
+                    
+                    updateDots(pageNumber);
+
+                    setTimeout(function() {
+                        nextPageElement.style.opacity = '1';
+                    }, 50);
+                }, 800);
+            }
+        }
+
+        function updateDots(activePage) {
+            if (activePage === 6) {
+                document.getElementById('dots-container').style.display = 'none';
+                return;
+            }
+            for (var i = 2; i <= 6; i++) {
+                var dot = document.getElementById('dot' + i);
+                if (dot) {
+                    if (i === activePage) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
