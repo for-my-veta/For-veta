@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение для Веточки</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fceef0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 340px;
+            width: 90%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card.active { display: flex; }
+        .gif { width: 150px; height: 150px; margin-bottom: 20px; font-size: 80px; line-height: 150px; }
+        h1, h2 { color: #333; font-size: 19px; margin: 0 0 20px 0; line-height: 1.5; }
+        .btn-container { display: flex; gap: 15px; width: 100%; justify-content: center; position: relative; height: 50px; margin-top: 10px; }
+        button { padding: 12px 28px; font-size: 16px; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .yes-btn { background-color: #ff4d6d; color: white; width: 120px; }
+        .no-btn { background-color: #e0e0e0; color: #555; position: absolute; width: 120px; }
+        .grid-options { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; }
+        .option-item { background: #f8f9fa; border: 2px solid #eee; padding: 12px; border-radius: 12px; font-size: 15px; cursor: pointer; transition: 0.2s; font-weight: 500; color: #444; }
+        .option-item:hover { border-color: #ff4d6d; background: #fff5f7; }
+        input { width: 90%; padding: 12px; margin-bottom: 15px; border: 2px solid #eee; border-radius: 10px; font-size: 16px; outline: none; text-align: center; }
+        input:focus { border-color: #ff4d6d; }
+    </style>
+</head>
+<body>
+
+    <!-- Скрытый музыкальный плеер с треком Lord Huron -->
+    <audio id="myAudio" loop>
+        <source src="https://archive.org/download/lord-huron-the-night-we-met/Lord%20Huron%20-%20The%20Night%20We%20Met.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- ЭКРАН 1 -->
+    <div class="card active" id="step1">
+        <div class="gif">☕</div>
+        <h1>Хватит молчать, иногда гордость — это действительно плохо, она только отдаляет людей. Веточка, несмотря на всё это расстояние между нами, давай созвонимся вечерком на чай или кофе по видеосвязи? Уделишь мне немного времени? ☕</h1>
+        <div class="btn-container">
+            <button class="yes-btn" onclick="startEverything()">Да</button>
+            <button class="no-btn" id="escape-btn" style="left: calc(50% + 10px); top: 0;">Нет</button>
+        </div>
+    </div>
+
+    <!-- ЭКРАН 2 -->
+    <div class="card" id="step2">
+        <div class="gif">🥰</div>
+        <h2>Вот и супер! На самом деле я очень рад. Давно пора было нормально, искренне поговорить и отпустить все обиды.</h2>
+        <button class="yes-btn" style="width: 80%;" onclick="nextStep(3)">Давай выберем время</button>
+    </div>
+
+    <!-- ЭКРАН 3 -->
+    <div class="card" id="step3">
+        <div class="gif">📅</div>
+        <h2>Выбирай день и время, когда ты будешь полностью свободна и тебя никто не будет отвлекать:</h2>
+        <input type="date" id="dateInput">
+        <input type="time" id="timeInput">
+        <button class="yes-btn" style="width: 80%;" onclick="saveDateTime()">Далее ✨</button>
+    </div>
+
+    <!-- ЭКРАН 4 -->
+    <div class="card" id="step4">
+        <div class="gif">✨</div>
+        <h2>Какую атмосферу для нашего разговора наведём? Обещаю подстроиться под любое твое настроение:</h2>
+        <div class="grid-options">
+            <div class="option-item" onclick="chooseAtmosphere('просто поболтать обо всём на свете')">Болтаем обо всем 🗣️</div>
+            <div class="option-item" onclick="chooseAtmosphere('рассказывать секреты')">Рассказываем секреты 🤫</div>
+            <div class="option-item" onclick="chooseAtmosphere('строить планы')">Строим планы 🗺️</div>
+            <div class="option-item" onclick="chooseAtmosphere('сидеть с кружкой чая')">С кружкой чая ☕</div>
+            <div class="option-item" onclick="chooseAtmosphere('устраивать вечерний созвон')">Вечерний созвон 🌙</div>
+        </div>
+    </div>
+
+    <!-- ЭКРАН 5 -->
+    <div class="card" id="step5">
+        <div class="gif">❤️</div>
+        <h2>Всё, договорились!</h2>
+        <p id="final-text" style="font-size: 16px; color: #444; line-height: 1.5;"></p>
+    </div>
+
+    <script>
+        const noButton = document.getElementById('escape-btn');
+        const audio = document.getElementById('myAudio');
+        let chosenDate = "";
+        let chosenTime = "";
+
+        // Убегание кнопки "Нет" от касания на смартфонах
+        noButton.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            const card = document.getElementById('step1');
+            const maxX = card.clientWidth - noButton.offsetWidth - 20;
+            const maxY = card.clientHeight - noButton.offsetHeight - 20;
+            const randomX = Math.random() * maxX - (card.clientWidth / 2 - noButton.offsetWidth);
+            const randomY = Math.random() * maxY - 30;
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+        });
+
+        // Запуск музыки и переход на второй экран
+        function startEverything() {
+            audio.play().catch(function(error) {
+                console.log("Плеер заблокирован:", error);
+            });
+            nextStep(2);
+        }
+
+        function nextStep(stepNumber) {
+            document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+            document.getElementById('step' + stepNumber).classList.add('active');
+        }
+
+        function deleteYears(dateStr) {
+            return dateStr.replace(/\s*г\./, '').replace(/\s*года/, '');
+        }
+
+        function saveDateTime() {
+            const d = document.getElementById('dateInput').value;
+            const t = document.getElementById('timeInput').value;
+            if(!d || !t) {
+                alert("Пожалуйста, выбери дату и время созвона!");
+                return;
+            }
+            const dateObj = new Date(d);
+            const options = { day: 'numeric', month: 'long' };
+            chosenDate = deleteYears(dateObj.toLocaleDateString('ru-RU', options));
+            chosenTime = t;
+            nextStep(4);
+        }
+
+        function chooseAtmosphere(styleName) {
+            document.getElementById('final-text').innerHTML = `Забились на <b>${chosenDate}</b> в <b>${chosenTime}</b>.<br><br>Наливай побольше чая, мы будем <b>${styleName}</b>. Очень жду этого дня. На связи! ❤️`;
+            nextStep(5);
+        }
+    </script>
+</body>
+</html>
